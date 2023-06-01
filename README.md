@@ -21,7 +21,7 @@ Pretty simple, right? Well this is where it gets interesting:
 
 - Once the sell by date has passed, Quality degrades twice as fast
 - The Quality of an item is never negative
-- "Aged Brie" actually increases in Quality the older it gets
+- "Aged Brie" actually increases in Quality the older it gets - also twice as fast once its sell by Date passes
 - The Quality of an item is never more than 50
 - "Sulfuras", being a legendary item, never has to be sold or decreases 
 in Quality

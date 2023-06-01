@@ -58,7 +58,6 @@ class GuildedRose {
                         item.quality = item.quality + 1
                     }
                 }
-
             }
         }
     }
@@ -69,6 +68,8 @@ data class Item(
     var sellInDays: Int,
     var quality: Int
 ) 
+
+fun List<Item>.name(name: String): Item = this.first { it.name == name }
 
 fun main() {
     println("Opening guilded rose store...")

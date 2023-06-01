@@ -40,23 +40,56 @@ class GuildedRoseTest {
 
     @Test
     fun `elixir reduces both values by one`() {
-        assertEquals(6, rose.items.first {it.name == "Elixir of the Mongoose"}.quality )
-        assertEquals(4, rose.items.first {it.name == "Elixir of the Mongoose"}.sellInDays )
+        assertEquals(6, rose.items.name("Elixir of the Mongoose").quality )
+        assertEquals(4, rose.items.name("Elixir of the Mongoose").sellInDays )
     }
 
     @Test
     fun `Vest quality decreases twice as fast after sellInDays`() {
-        assertEquals(19, rose.items.first {it.name == "+5 Dexterity Vest"}.quality )
-        assertEquals(9, rose.items.first {it.name == "+5 Dexterity Vest"}.sellInDays )
+        assertEquals(19, rose.items.name("+5 Dexterity Vest").quality )
+        assertEquals(9, rose.items.name("+5 Dexterity Vest").sellInDays )
         for (times in 1..10) {
             rose.updateQuality()
         }
-        assertEquals(8, rose.items.first {it.name == "+5 Dexterity Vest"}.quality )
-        assertEquals(-1, rose.items.first {it.name == "+5 Dexterity Vest"}.sellInDays )
+        assertEquals(8, rose.items.name("+5 Dexterity Vest").quality )
+        assertEquals(-1, rose.items.name("+5 Dexterity Vest").sellInDays )
     }
 
     @Test
-    fun `Aged Brie increases in quality once its sellIn passes`() {
+    fun `Aged Brie increases in quality the older it gets`() {
+        assertEquals(1, rose.items.name("Aged Brie").sellInDays )
+        assertEquals(1, rose.items.name("Aged Brie").quality )
+        rose.updateQuality()
+        assertEquals(0, rose.items.name("Aged Brie").sellInDays )
+        assertEquals(2, rose.items.name("Aged Brie").quality )
+        rose.updateQuality()
+        assertEquals(-1, rose.items.name("Aged Brie").sellInDays )
+        assertEquals(4, rose.items.name("Aged Brie").quality )
+    }
 
+    @Test
+    fun `Quality never more than 50`(){
+        for (times in 1..100) {
+            rose.updateQuality()
+        }
+        rose.items.forEach {
+            assertTrue(it.quality <= 50 || it.name == "Sulfuras, Hand of Ragnaros")
+        }
+    }
+    
+    @Test
+    fun `Backstage passes get more then less valuable`() {
+        // Item(name="Backstage passes to a TAFKAL80ETC concert", sellInDays = 15, quality = 20),
+        assertEquals(14, rose.items.name("Backstage passes to a TAFKAL80ETC concert").sellInDays )
+        assertEquals(21, rose.items.name("Backstage passes to a TAFKAL80ETC concert").quality )
+        for (times in 1..5) {rose.updateQuality()}
+        assertEquals(9, rose.items.name("Backstage passes to a TAFKAL80ETC concert").sellInDays )
+        assertEquals(27, rose.items.name("Backstage passes to a TAFKAL80ETC concert").quality )
+        for (times in 1..5) {rose.updateQuality()}
+        assertEquals(4, rose.items.name("Backstage passes to a TAFKAL80ETC concert").sellInDays )
+        assertEquals(38, rose.items.name("Backstage passes to a TAFKAL80ETC concert").quality )
+        for (times in 1..5) {rose.updateQuality()}
+        assertEquals(-1, rose.items.name("Backstage passes to a TAFKAL80ETC concert").sellInDays )
+        assertEquals(0, rose.items.name("Backstage passes to a TAFKAL80ETC concert").quality )
     }
 }
