@@ -92,4 +92,11 @@ class GuildedRoseTest {
         assertEquals(-1, rose.items.name("Backstage passes to a TAFKAL80ETC concert").sellInDays )
         assertEquals(0, rose.items.name("Backstage passes to a TAFKAL80ETC concert").quality )
     }
+
+    @Test
+    fun `Conjured twice as fast`() {
+        assertEquals(2, rose.items.name("Conjured Mana Cake").sellInDays )
+        assertEquals(4, rose.items.name("Conjured Mana Cake").quality )
+    }
+
 }

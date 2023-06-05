@@ -14,49 +14,39 @@ class GuildedRose {
 
     fun updateQuality() {
         for (item in items) {
-            if (item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert") {
-                if (item.quality > 0) {
-                    if (item.name != "Sulfuras, Hand of Ragnaros") {
-                        item.quality = item.quality - 1
-                    }
-                }
-            }
-            else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1
-                    if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-                        if (item.sellInDays < 11) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1
-                            }
-                        }
-                        if (item.sellInDays < 6) {
-                            if (item.quality < 50) {
-                                item.quality = item.quality + 1
-                            }
-                        }
-                    }
+            if (item.name == "Sulfuras, Hand of Ragnaros") continue
+            item.sellInDays = item.sellInDays - 1
 
+            if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+                item.increaseQuality()
+                if (item.sellInDays < 10) {
+                    item.increaseQuality()
                 }
-            }
-            if (item.name != "Sulfuras, Hand of Ragnaros") {
-                item.sellInDays = item.sellInDays - 1
-            }
-            if (item.sellInDays < 0) {
-                if (item.name != "Aged Brie") {
-                    if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
-                        if (item.quality > 0) {
-                            if (item.name != "Sulfuras, Hand of Ragnaros") {
-                                item.quality = item.quality - 1
-                            }
-                        }
-                    } else {
-                        item.quality = item.quality - item.quality
-                    }
-                } else {
-                    if (item.quality < 50) {
-                        item.quality = item.quality + 1
-                    }
+                if (item.sellInDays < 5) {
+                    item.increaseQuality()
+                }
+                if (item.isExpired()) {
+                    item.quality = item.quality - item.quality
+                }
+
+            } else if (item.name == "Aged Brie") {
+                item.increaseQuality()
+                if (item.isExpired()) {
+                    item.increaseQuality()
+                }
+            } else if (item.name == "Conjured Mana Cake") {
+                item.decreaseQuality()
+                if (item.isExpired()) {
+                    item.decreaseQuality()
+                }
+                item.decreaseQuality()
+                if (item.isExpired()) {
+                    item.decreaseQuality()
+                }
+            } else {
+                item.decreaseQuality()
+                if (item.isExpired()) {
+                    item.decreaseQuality()
                 }
             }
         }
@@ -70,6 +60,18 @@ data class Item(
 ) 
 
 fun List<Item>.name(name: String): Item = this.first { it.name == name }
+
+fun Item.increaseQuality() {
+    if (quality < 50) quality++
+}
+
+fun Item.decreaseQuality() {
+    if (quality > 0) quality--
+}
+
+fun Item.isExpired() : Boolean {
+    return sellInDays < 0
+}
 
 fun main() {
     println("Opening guilded rose store...")
