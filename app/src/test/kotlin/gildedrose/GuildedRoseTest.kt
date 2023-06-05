@@ -59,6 +59,7 @@ class GuildedRoseTest {
     fun `Aged Brie increases in quality the older it gets`() {
         assertEquals(1, rose.items.name("Aged Brie").sellInDays )
         assertEquals(1, rose.items.name("Aged Brie").quality )
+
         rose.updateQuality()
         assertEquals(0, rose.items.name("Aged Brie").sellInDays )
         assertEquals(2, rose.items.name("Aged Brie").quality )
